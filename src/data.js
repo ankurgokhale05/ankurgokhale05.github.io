@@ -3,7 +3,7 @@
 export const profile = {
   name: 'Ankur Gokhale',
   title: 'Senior Software Engineer',
-  tagline: 'I build web applications and data-driven tools, with a focus on machine learning and AI.',
+  tagline: 'I build backend systems and data platforms that scale, with a deep interest in machine learning and AI.',
   email: 'ankurgokhale05@gmail.com',
   resume: 'resume.pdf', // file in /public; set to '' to hide the résumé
 };
@@ -18,7 +18,7 @@ export const socials = [
 export const about = [
   "I'm a software engineer at <b>CVS Health</b>, where I build microservices and data pipelines for an underwriting platform. I enjoy building reliable backend systems and the tooling that keeps them well tested.",
   "Before CVS, I built the Creator Analytics platform as a <b>software development engineer at TikTok</b>, worked on Webex Contact Center as a <b>software engineer at Cisco</b>, and built a web app for small merchants as a <b>software engineering intern at Visa</b>.",
-  "I hold a <b>Master's in Computer Science</b> (Data Science track) from the University of Texas at Dallas. Outside of work, I'm an avid reader and a curious polymath. I love to travel, hike, and cook, and I enjoy personal finance and actively managing my investment portfolio.",
+  "I hold a <b>Master's in Computer Science</b> (Data Science track) from the University of Texas at Dallas. Outside of work, I'm an avid reader and a curious polymath. I love to travel, hike, cook, and strength train, and I enjoy personal finance and actively managing my investment portfolio.",
 ]
 
 // `date` is optional — shown in the left column under the logo.
@@ -92,7 +92,7 @@ export const experience = [
     tech: ['Python', 'Django', 'JavaScript', 'jQuery', 'Bootstrap', 'SQLite', 'Nightwatch.js'],
   },
   {
-    date: '',
+    date: 'Oct 2017 — Jun 2018',
     title: 'Mobile and Web Developer',
     company: 'Digital Vibes LLC',
     location: 'United Kingdom',
@@ -108,7 +108,7 @@ export const experience = [
     tech: ['React Native', 'NativeScript', 'React', 'AngularJS', 'TypeScript', 'Redux', 'Selenium'],
   },
   {
-    date: '',
+    date: 'Jun 2017 — Sep 2017',
     title: 'Front End Developer',
     company: 'Aduera Inc.',
     location: 'Mumbai, India',
@@ -119,6 +119,29 @@ export const experience = [
       "Managed the company's social media.",
     ],
     tech: ['HTML', 'CSS', 'Sass', 'Node.js', 'Bootstrap', 'jQuery'],
+  },
+];
+
+export const education = [
+  {
+    date: '2019 — 2021',
+    school: 'The University of Texas at Dallas',
+    degree: 'Master of Science in Computer Science',
+    location: 'Dallas, TX',
+    url: 'https://www.utdallas.edu',
+    logo: 'logos/utd.svg',
+    details: ['Specialization in Data Science', 'GPA 3.81 / 4.0'],
+    coursework: ['Design & Analysis of Algorithms', 'Machine Learning', 'Database Design', 'Big Data Systems'],
+  },
+  {
+    date: '2015 — 2019',
+    school: 'University of Mumbai',
+    degree: 'B.E. (Hons.) in Computer Science',
+    location: 'Mumbai, India',
+    url: 'https://mu.ac.in',
+    logo: 'logos/mumbai-university.svg',
+    details: ['GPA 8.8 / 10'],
+    coursework: [],
   },
 ];
 

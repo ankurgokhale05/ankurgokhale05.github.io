@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Section from './components/Section';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
+import Education from './components/Education';
 import ResumeViewer from './components/ResumeViewer';
 
 function useSpotlight() {
@@ -37,7 +38,7 @@ function useActiveSection(ids) {
   return active;
 }
 
-const SECTION_IDS = ['about', 'experience', 'projects'];
+const SECTION_IDS = ['about', 'experience', 'education', 'projects'];
 
 export default function App() {
   const pos = useSpotlight();
@@ -48,6 +49,11 @@ export default function App() {
   const closeResume = useCallback(() => {
     setResumeOpen(false);
     if (window.location.hash === '#resume') history.replaceState(null, '', window.location.pathname);
+  }, []);
+  // The page renders after the browser's own jump to #section, so redo it once content exists.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (SECTION_IDS.includes(id)) document.getElementById(id)?.scrollIntoView();
   }, []);
   const resumeSrc = profile.resume ? `${import.meta.env.BASE_URL}${profile.resume}` : '';
 
@@ -78,6 +84,9 @@ export default function App() {
             </Section>
             <Section id="experience" label="Work experience">
               <Experience onOpenResume={resumeSrc ? openResume : null} />
+            </Section>
+            <Section id="education" label="Education">
+              <Education />
             </Section>
             <Section id="projects" label="Selected projects">
               <Projects />
