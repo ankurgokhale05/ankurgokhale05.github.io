@@ -6,6 +6,7 @@ export const profile = {
   tagline: 'I build backend systems and data platforms that scale, with a deep interest in machine learning and AI.',
   email: 'ankurgokhale05@gmail.com',
   resume: 'resume.pdf', // file in /public; set to '' to hide the résumé
+  openTo: 'Open to new opportunities', // shown under the tagline and in the footer; set to '' to hide
 };
 
 export const socials = [
@@ -93,7 +94,7 @@ export const experience = [
     company: 'Digital Vibes LLC',
     location: 'United Kingdom',
     url: '',
-    logo: 'logos/digital-vibes.png',
+    logo: 'logos/digital-vibes.webp',
     bullets: [
       'Front-end developer on Kuendo, a mobile application for residents of condo communities, from development through deployment.',
       'Built cross-platform mobile and web interfaces with React Native, NativeScript, React, AngularJS, and TypeScript.',
@@ -109,13 +110,23 @@ export const experience = [
     company: 'Aduera Inc.',
     location: 'Mumbai, India',
     url: '',
-    logo: 'logos/aduera.jpg',
+    logo: 'logos/aduera.webp',
     bullets: [
       'Built the front end for a peer-to-peer marketplace where students buy and sell books directly, removing the middleman.',
       "Managed the company's social media.",
     ],
     tech: ['HTML', 'CSS', 'Sass', 'Node.js', 'Bootstrap', 'jQuery'],
   },
+];
+
+// Grouped skills, from the résumé and the tools used in each role.
+export const skills = [
+  { group: 'Languages', items: ['Python', 'Java', 'Scala', 'JavaScript', 'TypeScript'] },
+  { group: 'Data & Cloud', items: ['Microsoft Azure', 'Azure Data Factory', 'Apache Airflow', 'Apache Kafka', 'Apache Hadoop', 'ZooKeeper', 'Elasticsearch', 'Kibana'] },
+  { group: 'Databases', items: ['MySQL', 'StarRocks', 'SQLite'] },
+  { group: 'Backend & Web', items: ['Django', 'Node.js', 'REST', 'GraphQL', 'React', 'React Native', 'HTML5', 'CSS3', 'Sass', 'jQuery'] },
+  { group: 'Testing', items: ['Pytest', 'Cypress', 'Selenium WebDriver', 'Jest', 'JUnit', 'unittest', 'Nightwatch.js', 'Locust', 'JMeter'] },
+  { group: 'Tools', items: ['Git', 'Jenkins', 'Postman', 'JIRA', 'Rally'] },
 ];
 
 export const education = [

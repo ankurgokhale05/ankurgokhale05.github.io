@@ -11,9 +11,9 @@ export default function Publications({ onOpenSlides }) {
         <li key={p.title} data-reveal className="mb-12">
           <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
             <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg" />
-            <header className="z-10 mb-2 mt-1 flex flex-wrap items-center gap-x-2 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2 sm:flex-col sm:items-start">
+            <header className="z-10 mb-2 mt-1 flex flex-wrap items-center gap-x-2 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:col-span-2 sm:flex-col sm:items-start">
               <span>{p.date}</span>
-              <span className="normal-case tracking-normal text-slate-500/80">{p.type}</span>
+              <span className="normal-case tracking-normal text-slate-400">{p.type}</span>
             </header>
             <div className="z-10 sm:col-span-6">
               <h3 className="font-medium leading-snug text-slate-200">
@@ -34,7 +34,7 @@ export default function Publications({ onOpenSlides }) {
                   <span className="text-base leading-tight">{p.title}</span>
                 )}
               </h3>
-              <p className="mt-1 text-sm text-slate-500">{p.venue}</p>
+              <p className="mt-1 text-sm text-slate-400">{p.venue}</p>
               {p.authors && (
                 <p className="mt-1 text-sm">
                   {p.authors.map((a, i) => (

@@ -6,7 +6,7 @@ export function Logo({ src, name }) {
   if (src) {
     return (
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-2">
-        <img src={`${import.meta.env.BASE_URL}${src}`} alt={`${name} logo`} className="max-h-full max-w-full object-contain" loading="lazy" />
+        <img src={`${import.meta.env.BASE_URL}${src}`} alt={`${name} logo`} width="32" height="32" className="h-8 w-8 object-contain" loading="lazy" />
       </div>
     );
   }
@@ -33,7 +33,7 @@ function Title({ job }) {
           href={job.url}
           target="_blank"
           rel="noreferrer noopener"
-          aria-label={`${job.title} at ${job.company} (opens in a new tab)`}
+          aria-label={`${job.title} · ${job.company} (opens in a new tab)`}
         >
           <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block" />
           <span>
@@ -57,11 +57,11 @@ export default function Experience({ onOpenResume }) {
               <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg" />
               <header className="z-10 mb-3 flex items-center gap-3 sm:col-span-2 sm:mb-0 sm:flex-col sm:items-start sm:gap-3">
                 <Logo src={job.logo} name={job.company} />
-                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">{job.date || job.location}</span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">{job.date || job.location}</span>
               </header>
               <div className="z-10 sm:col-span-6">
                 <Title job={job} />
-                {job.date && job.location && <div className="text-sm text-slate-500">{job.location}</div>}
+                {job.date && job.location && <div className="text-sm text-slate-400">{job.location}</div>}
                 <ul className="mt-2 list-disc space-y-1.5 pl-4 text-sm leading-normal marker:text-slate-600">
                   {job.bullets.map((b) => (
                     <li key={b}>{b}</li>

@@ -10,8 +10,13 @@ describe('App', () => {
   it('renders all sections in order', () => {
     const { container } = render(<App />);
     const ids = [...container.querySelectorAll('main section')].map((s) => s.id);
-    expect(ids).toEqual(['about', 'experience', 'education', 'publications', 'projects']);
+    expect(ids).toEqual(['about', 'experience', 'skills', 'education', 'publications', 'projects']);
     expect(screen.getByRole('contentinfo')).toHaveAttribute('id', 'contact');
+  });
+
+  it('says in the footer that Ankur is open to new opportunities', () => {
+    render(<App />);
+    expect(screen.getByRole('contentinfo')).toHaveTextContent("I'm open to new opportunities.");
   });
 
   it('keeps the footer free of third-party credits', () => {

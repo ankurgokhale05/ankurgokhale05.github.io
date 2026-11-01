@@ -174,7 +174,7 @@ export default function ResumeViewer({ src, open, onClose, title = 'Résumé' })
         onClick={(e) => e.target === e.currentTarget && onClose()}
         onContextMenu={(e) => e.preventDefault()}
       >
-        {status === 'loading' && <p className="py-12 text-center text-sm text-slate-500">Loading {name}…</p>}
+        {status === 'loading' && <p className="py-12 text-center text-sm text-slate-400">Loading {name}…</p>}
         {status === 'error' && <p className="py-12 text-center text-sm text-slate-400">Sorry, the {name} couldn&apos;t be loaded.</p>}
         {/* Tapping the page toggles zoom; tapping beside it closes the viewer. */}
         <div
