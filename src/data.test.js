@@ -73,6 +73,7 @@ describe('experience', () => {
     expect(tiktok.title).toBe('Software Development Engineer');
     expect(JSON.stringify(tiktok)).not.toMatch(/SDET/);
     expect(tiktok.bullets[0]).toMatch(/Analytics platform/);
+    expect(tiktok.bullets).toHaveLength(6);
   });
 });
 
