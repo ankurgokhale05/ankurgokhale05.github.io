@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "test:all": "npm test && npm run test:e2e"
+    "test:all": "npm test && npm run test:e2e",
+    "check-links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

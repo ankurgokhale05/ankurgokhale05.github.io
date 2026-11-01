@@ -1,0 +1,38 @@
+name: Monthly link check
+
+# Checks the live site and every outside link in src/data.js once a month.
+# If anything is broken, opens (or updates) a GitHub issue labeled "broken-links".
+on:
+  schedule:
+    - cron: '0 14 1 * *' # 1st of each month, 14:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check links
+        id: links
+        run: node scripts/check-links.mjs --base https://ankurgokhale05.github.io
+        env:
+          LINK_REPORT: link-report.md
+      - name: Open or update an issue
+        if: failure() && steps.links.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create broken-links --color d73a4a --description "Found by the monthly link check" 2>/dev/null || true
+          existing=$(gh issue list --label broken-links --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file link-report.md
+          else
+            gh issue create --title "Broken links on the portfolio site" --label broken-links --body-file link-report.md
+          fi
