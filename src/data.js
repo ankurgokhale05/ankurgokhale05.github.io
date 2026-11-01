@@ -18,7 +18,7 @@ export const socials = [
 export const about = [
   "I'm a software engineer at <b>CVS Health</b>, where I build microservices and data pipelines for an underwriting platform. I enjoy building reliable backend systems and the tooling that keeps them well tested.",
   "Before CVS, I built the Creator Analytics platform as a <b>software development engineer at TikTok</b>, worked on Webex Contact Center as a <b>software engineer at Cisco</b>, and built a web app for small merchants as a <b>software engineering intern at Visa</b>.",
-  "I hold a <b>Master's in Computer Science</b> (Data Science track) from the University of Texas at Dallas. Outside of work, I'm an avid reader and a curious polymath who loves to travel and go hiking.",
+  "I hold a <b>Master's in Computer Science</b> (Data Science track) from the University of Texas at Dallas. Outside of work, I'm an avid reader and a curious polymath. I love to travel, hike, and cook, and I enjoy personal finance and actively managing my investment portfolio.",
 ]
 
 // `date` is optional — shown in the left column under the logo.
