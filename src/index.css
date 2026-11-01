@@ -3,3 +3,61 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Slow drifting glow for screens without the mouse spotlight (phones, tablets, narrow windows). */
+.ambient-glow {
+  display: none;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-glow::before,
+.ambient-glow::after {
+  content: '';
+  position: absolute;
+  width: 140vmax;
+  height: 140vmax;
+  border-radius: 50%;
+  will-change: transform;
+}
+.ambient-glow::before {
+  top: -80vmax;
+  left: -60vmax;
+  background: radial-gradient(closest-side, rgba(29, 78, 216, 0.16), transparent 70%);
+  animation: glow-drift-a 20s ease-in-out infinite alternate;
+}
+.ambient-glow::after {
+  bottom: -90vmax;
+  right: -70vmax;
+  background: radial-gradient(closest-side, rgba(45, 212, 191, 0.07), transparent 70%);
+  animation: glow-drift-b 24s ease-in-out infinite alternate;
+}
+@keyframes glow-drift-a {
+  from { transform: translate(0, 0); }
+  to { transform: translate(35vw, 45vh); }
+}
+@keyframes glow-drift-b {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-30vw, -40vh); }
+}
+@media (max-width: 1023px), (hover: none) {
+  .ambient-glow { display: block; }
+}
+
+/* Cards fade in and rise slightly the first time they scroll into view. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow::before,
+  .ambient-glow::after { animation: none; }
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}

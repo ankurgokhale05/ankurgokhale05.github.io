@@ -11,7 +11,6 @@ export const profile = {
 export const socials = [
   { name: 'GitHub', icon: 'github', url: 'https://github.com/ankurgokhale05' },
   { name: 'LinkedIn', icon: 'linkedin', url: 'https://www.linkedin.com/in/ankurajitgokhale/' },
-  { name: 'Twitter', icon: 'twitter', url: 'https://twitter.com/ankur_gokhale' },
   { name: 'Email', icon: 'mail', url: 'mailto:ankurgokhale05@gmail.com' },
 ];
 
