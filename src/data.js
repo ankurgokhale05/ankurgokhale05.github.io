@@ -141,6 +141,30 @@ export const education = [
   },
 ];
 
+// Newest first. `slides` opens in the on-site viewer; `url` links out to the paper.
+export const publications = [
+  {
+    date: 'Jul 2020',
+    title: 'Visa Government Payment Portal (VGPP)',
+    type: 'White paper',
+    venue: 'Visa Intern Case Challenge · Team STIMULATE',
+    award: 'Ranked 2nd of 56 teams',
+    description:
+      'A mobile and web portal, built on Visa Direct and Plaid APIs, that connects the IRS with citizens to speed up tax refunds and stimulus payments, and moves government-to-consumer (G2C) payments away from paper checks.',
+    slides: 'papers/vgpp-slides.pdf',
+    tech: ['Visa Direct', 'Visa Token Service', 'Plaid', 'G2C payments'],
+  },
+  {
+    date: 'Oct 2018',
+    title: 'Saviour: Disaster Management & Monitoring Utility',
+    type: 'Conference paper',
+    venue: 'Proceedings of the 2019 Conference on Technologies for Future Cities (CTFC) · Elsevier BV – Machine Learning Journal',
+    authors: ['P. Kanade', 'N. Aswal', 'A. Gokhale'],
+    url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3276164',
+    tech: [],
+  },
+];
+
 export const projects = [
   {
     title: 'Protein Statistics and Analysis',

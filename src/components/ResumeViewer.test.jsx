@@ -13,7 +13,7 @@ const fakePdf = (numPages) => ({
   destroy: vi.fn(),
   getPage: async () => ({
     getViewport: ({ scale }) => ({ width: 612 * scale, height: 792 * scale }),
-    render: () => ({ promise: Promise.resolve() }),
+    render: () => ({ promise: Promise.resolve(), cancel: vi.fn() }),
   }),
 });
 
@@ -40,6 +40,23 @@ describe('ResumeViewer', () => {
     expect(getDocument).toHaveBeenCalledWith('/resume.pdf');
     expect(screen.getByRole('img', { name: 'Résumé page 2 of 2' }).tagName).toBe('CANVAS');
     expect(screen.queryByText('Loading résumé…')).not.toBeInTheDocument();
+  });
+
+  it('starts fitted to the screen and toggles zoom from the button or by tapping the page', async () => {
+    getDocument.mockReturnValue({ promise: Promise.resolve(fakePdf(1)) });
+    const onClose = vi.fn();
+    render(<ResumeViewer src="/resume.pdf" open onClose={onClose} />);
+    const page = await screen.findByRole('img', { name: 'Résumé page 1 of 1' });
+
+    const zoom = screen.getByRole('button', { name: 'Zoom in' });
+    expect(zoom).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(zoom);
+    expect(await screen.findByRole('button', { name: 'Fit to screen' })).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(await screen.findByRole('img', { name: 'Résumé page 1 of 1' }));
+    expect(await screen.findByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
+    expect(page).toBeTruthy();
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it('shows an error message if the PDF fails to load', async () => {

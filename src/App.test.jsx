@@ -10,7 +10,7 @@ describe('App', () => {
   it('renders all sections in order', () => {
     const { container } = render(<App />);
     const ids = [...container.querySelectorAll('main section')].map((s) => s.id);
-    expect(ids).toEqual(['about', 'experience', 'education', 'projects']);
+    expect(ids).toEqual(['about', 'experience', 'education', 'publications', 'projects']);
     expect(screen.getByRole('contentinfo')).toHaveAttribute('id', 'contact');
   });
 

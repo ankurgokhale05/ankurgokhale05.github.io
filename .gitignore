@@ -7,3 +7,4 @@ Screenshot*.png
 !public/resume.pdf
 test-results
 playwright-report
+!public/papers/*.pdf
