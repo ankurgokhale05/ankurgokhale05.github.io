@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ResumeViewer from './ResumeViewer';
 
 // Fake PDF.js: a 2-page document whose pages "render" instantly.
@@ -22,6 +22,7 @@ describe('ResumeViewer', () => {
     getDocument.mockReset();
     document.body.style.overflow = '';
   });
+  afterEach(() => vi.restoreAllMocks());
 
   it('renders nothing when closed', () => {
     render(<ResumeViewer src="/resume.pdf" open={false} onClose={() => {}} />);
@@ -46,6 +47,19 @@ describe('ResumeViewer', () => {
     getDocument.mockReturnValue({ promise: Promise.reject(new Error('404')) });
     render(<ResumeViewer src="/missing.pdf" open onClose={() => {}} />);
     expect(await screen.findByText("Sorry, the résumé couldn't be loaded.")).toBeInTheDocument();
+  });
+
+  it('stays quiet when closed while pages are still loading', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    let fail;
+    getDocument.mockReturnValue({ promise: new Promise((_, reject) => (fail = reject)) });
+    const { rerender } = render(<ResumeViewer src="/resume.pdf" open onClose={() => {}} />);
+
+    rerender(<ResumeViewer src="/resume.pdf" open={false} onClose={() => {}} />);
+    fail(new Error('Worker was destroyed'));
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(consoleError).not.toHaveBeenCalled();
   });
 
   it('closes with Escape, the close button, or a click outside the pages', async () => {
