@@ -1,0 +1,62 @@
+import { profile, socials } from '../data';
+import { icons } from './Icons';
+
+const sections = ['about', 'experience', 'projects'];
+
+export default function Header({ active }) {
+  return (
+    <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+      <div>
+        <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl">
+          <a href="/">{profile.name}</a>
+        </h1>
+        <h2 className="mt-3 text-lg font-medium tracking-tight text-slate-200 sm:text-xl">{profile.title}</h2>
+        <p className="mt-4 max-w-xs leading-normal">{profile.tagline}</p>
+
+        <nav className="hidden lg:block" aria-label="In-page jump links">
+          <ul className="mt-16 w-max">
+            {sections.map((id) => {
+              const isActive = active === id;
+              return (
+                <li key={id}>
+                  <a className="group flex items-center py-3" href={`#${id}`} aria-current={isActive ? 'true' : undefined}>
+                    <span
+                      className={`mr-4 h-px transition-all motion-reduce:transition-none group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200 ${
+                        isActive ? 'w-16 bg-slate-200' : 'w-8 bg-slate-600'
+                      }`}
+                    />
+                    <span
+                      className={`text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${
+                        isActive ? 'text-slate-200' : 'text-slate-500'
+                      }`}
+                    >
+                      {id}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+
+      <ul className="mt-8 ml-1 flex items-center" aria-label="Social media">
+        {socials.map((s) => (
+          <li key={s.name} className="mr-5 shrink-0 text-xs">
+            <a
+              className="block hover:text-slate-200"
+              href={s.url}
+              target={s.url.startsWith('mailto:') ? undefined : '_blank'}
+              rel="noreferrer noopener"
+              aria-label={`${s.name} (opens in a new tab)`}
+              title={s.name}
+            >
+              <span className="sr-only">{s.name}</span>
+              {icons[s.icon]('h-6 w-6')}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </header>
+  );
+}
