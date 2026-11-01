@@ -110,6 +110,16 @@ test.describe('navigation (desktop)', () => {
     await expect(nav.getByRole('link', { name: 'about' })).not.toHaveAttribute('aria-current');
   });
 
+  test('shows a heading above every section', async ({ page }) => {
+    await page.goto('/');
+    const headings = page.locator('main section h2');
+    await expect(headings).toHaveText(['About me', 'Work experience', 'Skills', 'Education', 'Publications', 'Selected projects'], { ignoreCase: true });
+    for (const h of await headings.all()) {
+      await h.scrollIntoViewIfNeeded();
+      await expect(h).toBeVisible();
+    }
+  });
+
   test('section links in the URL jump to that section', async ({ page }) => {
     await page.goto('/#education');
     await expect(page.locator('#education')).toBeInViewport();
