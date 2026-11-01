@@ -57,8 +57,10 @@ export default function ResumeViewer({ src, open, onClose }) {
         }
         if (!cancelled) setStatus('ready');
       } catch (err) {
+        // Closing the viewer mid-render cancels PDF.js work; that's expected, not an error.
+        if (cancelled) return;
         console.error(err);
-        if (!cancelled) setStatus('error');
+        setStatus('error');
       }
     })();
 

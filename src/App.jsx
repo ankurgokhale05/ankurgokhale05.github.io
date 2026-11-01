@@ -86,7 +86,7 @@ export default function App() {
   // The page renders after the browser's own jump to #section, so redo it once content exists.
   useEffect(() => {
     const id = window.location.hash.slice(1);
-    if (SECTION_IDS.includes(id)) document.getElementById(id)?.scrollIntoView();
+    if (id && id !== 'resume') document.getElementById(id)?.scrollIntoView();
   }, []);
   const resumeSrc = profile.resume ? `${import.meta.env.BASE_URL}${profile.resume}` : '';
 
@@ -102,7 +102,7 @@ export default function App() {
       <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-20 lg:px-24 lg:py-0">
         <a
           href="#content"
-          className="sr-only rounded bg-gradient-to-br from-teal-400 via-blue-500 to-purple-600 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3"
+          className="sr-only rounded bg-gradient-to-br from-teal-400 via-blue-500 to-purple-600 text-sm font-bold uppercase tracking-widest text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3"
         >
           Skip to Content
         </a>
@@ -125,7 +125,7 @@ export default function App() {
             <Section id="projects" label="Selected projects">
               <Projects />
             </Section>
-            <footer className="max-w-md pb-16 text-sm text-slate-500 sm:pb-0">
+            <footer id="contact" className="max-w-md scroll-mt-24 pb-16 text-sm text-slate-500 sm:pb-0">
               <p>
                 Want to get in touch? Email me at{' '}
                 <a
