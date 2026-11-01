@@ -25,7 +25,7 @@ test.describe('home page', () => {
     await page.goto('/');
     await expect(page).toHaveTitle('Ankur Gokhale — Senior Software Engineer');
     await expect(page.getByRole('heading', { level: 1, name: 'Ankur Gokhale' })).toBeVisible();
-    for (const id of ['about', 'experience', 'education', 'projects', 'contact']) {
+    for (const id of ['about', 'experience', 'education', 'publications', 'projects', 'contact']) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
   });
@@ -144,11 +144,42 @@ test.describe('résumé viewer', () => {
     const size = await firstPage.boundingBox();
     expect(size.height).toBeGreaterThan(size.width); // portrait page
 
+    // The whole page fits on screen without zooming out.
+    const viewport = page.viewportSize();
+    expect(size.y).toBeGreaterThanOrEqual(0);
+    expect(size.x).toBeGreaterThanOrEqual(0);
+    expect(size.y + size.height).toBeLessThanOrEqual(viewport.height);
+    expect(size.x + size.width).toBeLessThanOrEqual(viewport.width);
+
+    // "Zoom in" makes it bigger; "Fit to screen" brings it back.
+    // On phones the page already fills the width, so there's nothing to zoom to (pinch-zoom still works).
+    if (isMobile) {
+      await expect(dialog.getByRole('button', { name: 'Zoom in' })).toHaveCount(0);
+      expect(size.width).toBeGreaterThan(viewport.width * 0.8);
+    } else {
+      await dialog.getByRole('button', { name: 'Zoom in' }).click();
+      await expect.poll(async () => (await firstPage.boundingBox())?.width ?? 0).toBeGreaterThan(size.width);
+      await dialog.getByRole('button', { name: 'Fit to screen' }).click();
+      await expect.poll(async () => Math.round((await firstPage.boundingBox())?.width ?? 0)).toBe(Math.round(size.width));
+    }
+
     // Pages are drawn as images: no selectable PDF text layer.
     await expect(dialog.locator('.textLayer, [contenteditable]')).toHaveCount(0);
 
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
+  });
+
+  test('re-fits the page when the window is resized', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'phones do not resize');
+    await page.goto('/#resume');
+    const firstPage = page.getByRole('img', { name: /Résumé page 1 of/ });
+    await expect(firstPage).toBeVisible({ timeout: 15_000 });
+    await page.setViewportSize({ width: 1000, height: 600 });
+    await expect.poll(async () => {
+      const b = await firstPage.boundingBox();
+      return !!b && b.y + b.height <= 600;
+    }).toBe(true);
   });
 
   test('closes with the close button', async ({ page, isMobile }) => {
@@ -166,10 +197,40 @@ test.describe('résumé viewer', () => {
   });
 });
 
+test.describe('publications', () => {
+  test('lists both papers and links the Saviour paper', async ({ page }) => {
+    await page.goto('/#publications');
+    const section = page.locator('#publications');
+    await expect(section.getByRole('heading', { level: 3 })).toHaveText([
+      'Visa Government Payment Portal (VGPP)',
+      /Saviour: Disaster Management & Monitoring Utility/,
+    ]);
+    await expect(section.getByText('Ranked 2nd of 56 teams')).toBeVisible();
+    await expect(section.getByRole('link', { name: /Saviour/ })).toHaveAttribute('href', /ssrn\.com/);
+  });
+
+  test('opens the Visa slides in the viewer, fitted to the screen', async ({ page }) => {
+    await page.goto('/#publications');
+    await page.locator('#publications').getByRole('button', { name: /View slides/ }).click();
+    const dialog = page.getByRole('dialog', { name: 'Slides' });
+    await expect(dialog).toBeVisible();
+    const pages = dialog.getByRole('img', { name: /Slides page \d+ of 20/ });
+    await expect(pages).toHaveCount(20, { timeout: 20_000 });
+
+    const first = await pages.first().boundingBox();
+    expect(first.width).toBeGreaterThan(first.height); // landscape slides
+    expect(first.x + first.width).toBeLessThanOrEqual(page.viewportSize().width);
+    expect(first.y + first.height).toBeLessThanOrEqual(page.viewportSize().height);
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+});
+
 test.describe('old addresses and missing pages', () => {
   for (const [oldPage, section] of [['about.html', 'about'], ['work.html', 'projects'], ['contact.html', 'contact']]) {
     test(`/${oldPage} redirects to the ${section} section`, async ({ page }) => {
-      await page.goto(`/${oldPage}`);
+      await page.goto(`/${oldPage}`, { waitUntil: 'commit' });
       await expect(page).toHaveURL(new RegExp(`/#${section}$`));
       await expect(page.locator(`#${section}`)).toBeInViewport();
     });

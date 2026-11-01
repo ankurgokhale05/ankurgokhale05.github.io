@@ -18,7 +18,7 @@ describe('Header', () => {
     render(<Header active="education" />);
     const nav = screen.getByRole('navigation');
     const links = within(nav).getAllByRole('link');
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#about', '#experience', '#education', '#projects']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#about', '#experience', '#education', '#publications', '#projects']);
     expect(within(nav).getByRole('link', { name: 'education' })).toHaveAttribute('aria-current', 'true');
     expect(within(nav).getByRole('link', { name: 'about' })).not.toHaveAttribute('aria-current');
   });

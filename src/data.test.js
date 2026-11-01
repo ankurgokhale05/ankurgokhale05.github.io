@@ -2,7 +2,7 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { about, education, experience, profile, projects, socials } from './data';
+import { about, education, experience, profile, projects, publications, socials } from './data';
 
 const publicFile = (p) => existsSync(resolve(__dirname, '../public', p));
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -81,6 +81,24 @@ describe('education', () => {
   it('lists UT Dallas then University of Mumbai with existing logos', () => {
     expect(education.map((e) => e.school)).toEqual(['The University of Texas at Dallas', 'University of Mumbai']);
     for (const e of education) expect(publicFile(e.logo)).toBe(true);
+  });
+});
+
+describe('publications', () => {
+  it('lists the Visa white paper, then the Saviour paper', () => {
+    expect(publications.map((p) => p.date)).toEqual(['Jul 2020', 'Oct 2018']);
+    expect(publications[0].award).toBe('Ranked 2nd of 56 teams');
+  });
+
+  it('only links to files and pages that exist', () => {
+    for (const p of publications) {
+      if (p.slides) expect(publicFile(p.slides)).toBe(true);
+      if (p.url) expect(p.url).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('credits Ankur as an author of the Saviour paper', () => {
+    expect(publications.find((p) => p.title.startsWith('Saviour')).authors).toContain('A. Gokhale');
   });
 });
 

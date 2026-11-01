@@ -5,6 +5,7 @@ import Section from './components/Section';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Education from './components/Education';
+import Publications from './components/Publications';
 import ResumeViewer from './components/ResumeViewer';
 import { track } from './analytics';
 
@@ -39,7 +40,7 @@ function useActiveSection(ids) {
   return active;
 }
 
-const SECTION_IDS = ['about', 'experience', 'education', 'projects'];
+const SECTION_IDS = ['about', 'experience', 'education', 'publications', 'projects'];
 
 // Adds .is-visible to each [data-reveal] element the first time it scrolls into view.
 function useReveal() {
@@ -88,6 +89,13 @@ export default function App() {
     const id = window.location.hash.slice(1);
     if (id && id !== 'resume') document.getElementById(id)?.scrollIntoView();
   }, []);
+  // Slides for a publication, opened in the same read-only viewer as the résumé.
+  const [slides, setSlides] = useState(null);
+  const openSlides = useCallback((p) => {
+    setSlides(p);
+    track('slides-open', `Opened slides: ${p.title}`);
+  }, []);
+  const closeSlides = useCallback(() => setSlides(null), []);
   const resumeSrc = profile.resume ? `${import.meta.env.BASE_URL}${profile.resume}` : '';
 
   return (
@@ -122,6 +130,9 @@ export default function App() {
             <Section id="education" label="Education">
               <Education />
             </Section>
+            <Section id="publications" label="Publications">
+              <Publications onOpenSlides={openSlides} />
+            </Section>
             <Section id="projects" label="Selected projects">
               <Projects />
             </Section>
@@ -143,6 +154,12 @@ export default function App() {
         </div>
       </div>
       {resumeSrc && <ResumeViewer src={resumeSrc} open={resumeOpen} onClose={closeResume} />}
+      <ResumeViewer
+        src={slides ? `${import.meta.env.BASE_URL}${slides.slides}` : ''}
+        open={!!slides}
+        onClose={closeSlides}
+        title="Slides"
+      />
     </div>
   );
 }
