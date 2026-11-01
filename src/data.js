@@ -172,7 +172,9 @@ export const publications = [
     venue: 'Proceedings of the 2019 Conference on Technologies for Future Cities (CTFC) · Elsevier BV – Machine Learning Journal',
     authors: ['P. Kanade', 'N. Aswal', 'A. Gokhale'],
     url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3276164',
-    tech: [],
+    description:
+      'A machine learning system that detects human-caused disasters from crowdsourced reports and Twitter sentiment, then connects with emergency services to speed up search, rescue, and response.',
+    tech: ['Machine Learning', 'Sentiment Analysis', 'Crowdsourcing', 'Disaster Management'],
   },
 ];
 
