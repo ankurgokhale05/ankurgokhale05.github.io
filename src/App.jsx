@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { about, profile } from './data';
 import Header from './components/Header';
 import Section from './components/Section';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
+import ResumeViewer from './components/ResumeViewer';
 
 function useSpotlight() {
   const [pos, setPos] = useState(null);
@@ -41,6 +42,14 @@ const SECTION_IDS = ['about', 'experience', 'projects'];
 export default function App() {
   const pos = useSpotlight();
   const active = useActiveSection(SECTION_IDS);
+  // Visiting /#resume opens the résumé directly, so the link can be shared.
+  const [resumeOpen, setResumeOpen] = useState(() => window.location.hash === '#resume');
+  const openResume = useCallback(() => setResumeOpen(true), []);
+  const closeResume = useCallback(() => {
+    setResumeOpen(false);
+    if (window.location.hash === '#resume') history.replaceState(null, '', window.location.pathname);
+  }, []);
+  const resumeSrc = profile.resume ? `${import.meta.env.BASE_URL}${profile.resume}` : '';
 
   return (
     <div className="group/spotlight relative">
@@ -58,7 +67,7 @@ export default function App() {
           Skip to Content
         </a>
         <div className="lg:flex lg:justify-between lg:gap-4">
-          <Header active={active} />
+          <Header active={active} onOpenResume={resumeSrc ? openResume : null} />
           <main id="content" className="pt-24 lg:w-[52%] lg:py-24">
             <Section id="about" label="About me">
               <div className="space-y-4">
@@ -68,7 +77,7 @@ export default function App() {
               </div>
             </Section>
             <Section id="experience" label="Work experience">
-              <Experience />
+              <Experience onOpenResume={resumeSrc ? openResume : null} />
             </Section>
             <Section id="projects" label="Selected projects">
               <Projects />
@@ -81,17 +90,12 @@ export default function App() {
                 </a>
                 .
               </p>
-              <p className="mt-4">
-                Built with React, Vite, and Tailwind CSS. Layout inspired by{' '}
-                <a className="font-medium text-slate-400 hover:text-teal-300" href="https://brittanychiang.com" target="_blank" rel="noreferrer noopener">
-                  Brittany Chiang
-                </a>
-                .
-              </p>
+              <p className="mt-4">Built with React, Vite, and Tailwind CSS.</p>
             </footer>
           </main>
         </div>
       </div>
+      {resumeSrc && <ResumeViewer src={resumeSrc} open={resumeOpen} onClose={closeResume} />}
     </div>
   );
 }

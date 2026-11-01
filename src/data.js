@@ -2,35 +2,93 @@
 
 export const profile = {
   name: 'Ankur Gokhale',
-  title: 'Software Engineer',
+  title: 'Senior Software Engineer',
   tagline: 'I build web applications and data-driven tools, with a focus on machine learning and AI.',
   email: 'ankurgokhale05@gmail.com',
-  resume: '', // e.g. '/resume.pdf' — put the file in /public
+  resume: 'resume.pdf', // file in /public; set to '' to hide the résumé
 };
 
 export const socials = [
   { name: 'GitHub', icon: 'github', url: 'https://github.com/ankurgokhale05' },
-  { name: 'LinkedIn', icon: 'linkedin', url: 'https://www.linkedin.com/in/ankur-gokhale-86878a13b/' },
+  { name: 'LinkedIn', icon: 'linkedin', url: 'https://www.linkedin.com/in/ankurajitgokhale/' },
   { name: 'Twitter', icon: 'twitter', url: 'https://twitter.com/ankur_gokhale' },
   { name: 'Email', icon: 'mail', url: 'mailto:ankurgokhale05@gmail.com' },
 ];
 
 export const about = [
-  "I'm a software engineer with a Computer Science master's background from the University of Texas at Dallas. I enjoy building things that live on the web — from merchant-facing applications to mobile apps — and turning data into something useful.",
-  "I've worked as a <b>Sr. Software Engineering Intern at Visa</b>, building a web application for small merchants, as a <b>mobile and web developer</b> at a UK-based studio, and as a <b>front-end developer</b> on a peer-to-peer book marketplace.",
-  'Outside of product work, I explore machine learning, AI in games, protein structure analysis, and blockchain.',
-];
+  "I'm a software engineer at <b>CVS Health</b>, where I build microservices and data pipelines for an underwriting platform. I enjoy building reliable backend systems and the tooling that keeps them well tested.",
+  "Before CVS, I built the Creator Analytics platform as a <b>software development engineer at TikTok</b>, worked on Webex Contact Center as a <b>software engineer at Cisco</b>, and built a web app for small merchants as a <b>software engineering intern at Visa</b>.",
+  "I hold a <b>Master's in Computer Science</b> (Data Science track) from the University of Texas at Dallas. Outside of work, I'm an avid reader and a curious polymath who loves to travel and go hiking.",
+]
 
-// `date` is optional — add ranges like '2019 — 2020' to show them on the left.
+// `date` is optional — shown in the left column under the logo.
+// `logo` is optional — a file in /public/logos. Without one, the company's initials are shown.
 export const experience = [
   {
-    date: '',
+    date: 'May 2023 — Present',
+    title: 'Sr. Software Engineer',
+    company: 'CVS Health Inc.',
+    location: 'Dallas, TX',
+    url: 'https://www.cvshealth.com',
+    logo: 'logos/cvs-health.png',
+    bullets: [
+      'Developed and shipped 10+ features and microservices for EOS, an underwriting tool, using Python and MySQL.',
+      'Built data pipelines that move data from the data warehouse into MySQL using Airflow and Azure Data Factory.',
+      'Collaborated with PMs, QA, and other developers, and took part in Agile Scrum ceremonies.',
+    ],
+    tech: ['Python', 'MySQL', 'StarRocks', 'Microsoft Azure', 'Airflow', 'GraphQL'],
+  },
+  {
+    date: 'Oct 2021 — Jan 2023',
+    title: 'Software Development Engineer',
+    company: 'TikTok Inc.',
+    location: 'Mountain View, CA',
+    url: 'https://www.tiktok.com',
+    logo: 'logos/tiktok.svg',
+    bullets: [
+      'Implemented the Analytics platform for TikTok Creators on the Creator Growth – Analytics team.',
+      'Built backend APIs for real-time metrics such as likes, comments, and shares.',
+      'Built backend APIs for aggregated metrics including average watch time, demographics, geolocation, and retention graphs.',
+      'Improved the backend tools and infrastructure used for quality analysis.',
+      'Wrote test plans and test cases for 20+ features across the Creator Management and Monetization value chain.',
+      'Automated multiple backend APIs, raising code coverage from 0% to 40%.',
+      'Implemented API, UI, and mobile automation using Pytest, PagePass, and Shoots.',
+      'Integrated automation into CI/CD pipelines (ByteCycle) and cut latency to 1600 ms for faster releases and reporting (Tesla).',
+      'Migrated test data from the code repository to Nebula, an internal data management tool.',
+      'Handled incident management end to end: troubleshooting, escalation, postmortems, and root cause analysis.',
+      'Collaborated with cross-functional teams on projects across the Creator value chain.',
+    ],
+    tech: ['Python', 'Cypress', 'TypeScript', 'JavaScript', 'Pytest', 'CI/CD', 'Git', 'JIRA'],
+  },
+  {
+    date: 'Jul 2021 — Sep 2021',
+    title: 'Software Engineer',
+    company: 'Cisco Systems Inc.',
+    location: 'Herndon, VA',
+    url: 'https://www.cisco.com',
+    logo: 'logos/cisco.svg',
+    bullets: [
+      'Worked on the Webex Contact Center Flow Control Design team.',
+      'Refactored backend APIs for token authentication and authorization using Scala.',
+      'Implemented unit and functional tests using ScalaTest.',
+      'Took part in the deployment process and collaborated across teams.',
+    ],
+    tech: ['Scala', 'Java', 'ScalaTest', 'Jenkins', 'GitLab', 'Postman'],
+  },
+  {
+    date: 'May 2020 — Aug 2020',
     title: 'Sr. Software Engineering Intern',
     company: 'Visa Inc.',
     location: 'Foster City, CA',
     url: 'https://www.visa.com',
-    description:
-      "Built and deployed a web application for small merchants, projected to grow Visa's merchant user base by 75,000. Extended Visa's rewards and loyalty programs with a Karma Points mechanism, worked in Scrum to cut project completion time by 30%, and reached 60% unit test coverage with Nightwatch.js end-to-end and unit tests.",
+    logo: 'logos/visa.svg',
+    bullets: [
+      "Deployed a web application for small merchants, built in Python, that could grow Visa's merchant user base by 75,000.",
+      "Extended Visa's rewards and loyalty programs by implementing a Karma Points mechanism.",
+      'Followed Agile Scrum practices, reducing project completion time by 30%.',
+      'Designed the front end and back end using HTML5, CSS3, JavaScript (ES6), jQuery, Bootstrap, Django, and SQLite.',
+      'Wrote end-to-end and unit tests with Nightwatch.js, reaching 60% unit test coverage.',
+    ],
     tech: ['Python', 'Django', 'JavaScript', 'jQuery', 'Bootstrap', 'SQLite', 'Nightwatch.js'],
   },
   {
@@ -39,18 +97,27 @@ export const experience = [
     company: 'Digital Vibes LLC',
     location: 'United Kingdom',
     url: '',
-    description:
-      'Designed, developed, and deployed Kuendo, a mobile application for residents of condo communities. Worked with test-driven development, Agile practices, and Redux.',
-    tech: ['React', 'React Native', 'Node.js', 'AngularJS', 'TypeScript', 'Selenium'],
+    logo: 'logos/digital-vibes.png',
+    bullets: [
+      'Front-end developer on Kuendo, a mobile application for residents of condo communities, from development through deployment.',
+      'Built cross-platform mobile and web interfaces with React Native, NativeScript, React, AngularJS, and TypeScript.',
+      'Managed application state with Redux and wrote automated tests with Selenium.',
+      "Evaluated software design patterns and their trade-offs, helping the team choose the right patterns for the project's architecture.",
+      'Followed test-driven development and Agile practices, using GitHub, GitLab, and JIRA.',
+    ],
+    tech: ['React Native', 'NativeScript', 'React', 'AngularJS', 'TypeScript', 'Redux', 'Selenium'],
   },
   {
     date: '',
     title: 'Front End Developer',
     company: 'Aduera Inc.',
-    location: '',
+    location: 'Mumbai, India',
     url: '',
-    description:
-      'Built the front end for a peer-to-peer marketplace where students buy and sell books directly, removing the middleman. Also managed the company’s social media.',
+    logo: 'logos/aduera.jpg',
+    bullets: [
+      'Built the front end for a peer-to-peer marketplace where students buy and sell books directly, removing the middleman.',
+      "Managed the company's social media.",
+    ],
     tech: ['HTML', 'CSS', 'Sass', 'Node.js', 'Bootstrap', 'jQuery'],
   },
 ];

@@ -3,7 +3,10 @@ import { icons } from './Icons';
 
 const sections = ['about', 'experience', 'projects'];
 
-export default function Header({ active }) {
+const navLine = 'mr-4 h-px w-8 bg-slate-600 transition-all motion-reduce:transition-none group-hover:w-16 group-hover:bg-slate-200 group-focus-visible:w-16 group-focus-visible:bg-slate-200';
+const navText = 'text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 group-focus-visible:text-slate-200';
+
+export default function Header({ active, onOpenResume }) {
   return (
     <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
       <div>
@@ -36,8 +39,25 @@ export default function Header({ active }) {
                 </li>
               );
             })}
+            {onOpenResume && (
+              <li>
+                <button type="button" onClick={onOpenResume} className="group flex items-center py-3 focus-visible:outline-none">
+                  <span className={navLine} />
+                  <span className={navText}>Resume</span>
+                </button>
+              </li>
+            )}
           </ul>
         </nav>
+        {onOpenResume && (
+          <button
+            type="button"
+            onClick={onOpenResume}
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-teal-300/40 px-4 py-2 text-sm font-medium text-teal-300 hover:bg-teal-400/10 lg:hidden"
+          >
+            View Résumé
+          </button>
+        )}
       </div>
 
       <ul className="mt-8 ml-1 flex items-center" aria-label="Social media">
