@@ -2,7 +2,7 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { about, education, experience, profile, projects, publications, socials } from './data';
+import { about, education, experience, profile, projects, publications, skills, socials } from './data';
 
 const publicFile = (p) => existsSync(resolve(__dirname, '../public', p));
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -74,6 +74,22 @@ describe('experience', () => {
     expect(JSON.stringify(tiktok)).not.toMatch(/SDET/);
     expect(tiktok.bullets[0]).toMatch(/Analytics platform/);
     expect(tiktok.bullets).toHaveLength(6);
+  });
+});
+
+describe('skills', () => {
+  it('groups skills with no empty groups or duplicates', () => {
+    expect(skills.map((g) => g.group)).toEqual(['Languages', 'Data & Cloud', 'Databases', 'Backend & Web', 'Testing', 'Tools']);
+    const all = skills.flatMap((g) => g.items);
+    for (const g of skills) expect(g.items.length).toBeGreaterThan(0);
+    expect(new Set(all).size).toBe(all.length);
+  });
+
+  it('covers the core skills from the résumé', () => {
+    const all = skills.flatMap((g) => g.items);
+    for (const s of ['Python', 'Java', 'Microsoft Azure', 'Apache Kafka', 'MySQL', 'StarRocks', 'Django', 'Pytest', 'Cypress', 'Git']) {
+      expect(all).toContain(s);
+    }
   });
 });
 

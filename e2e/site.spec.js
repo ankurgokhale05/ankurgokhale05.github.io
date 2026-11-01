@@ -25,7 +25,7 @@ test.describe('home page', () => {
     await page.goto('/');
     await expect(page).toHaveTitle('Ankur Gokhale — Senior Software Engineer');
     await expect(page.getByRole('heading', { level: 1, name: 'Ankur Gokhale' })).toBeVisible();
-    for (const id of ['about', 'experience', 'education', 'publications', 'projects', 'contact']) {
+    for (const id of ['about', 'experience', 'skills', 'education', 'publications', 'projects', 'contact']) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
   });
@@ -85,6 +85,17 @@ test.describe('home page', () => {
       expect((await request.get(path)).status(), path).toBe(200);
     }
   });
+});
+
+test('shows the open-to-opportunities badge and the skills groups', async ({ page }) => {
+  await page.goto('/');
+  const badge = page.getByRole('link', { name: 'Open to new opportunities' });
+  await expect(badge).toBeVisible();
+  await expect(badge).toHaveAttribute('href', /^mailto:/);
+  await page.goto('/#skills');
+  const skills = page.locator('#skills');
+  await expect(skills.locator('dt')).toHaveText(['Languages', 'Data & Cloud', 'Databases', 'Backend & Web', 'Testing', 'Tools']);
+  await expect(skills.getByText('StarRocks')).toBeVisible();
 });
 
 test.describe('navigation (desktop)', () => {

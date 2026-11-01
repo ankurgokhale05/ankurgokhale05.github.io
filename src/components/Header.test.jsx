@@ -14,11 +14,26 @@ describe('Header', () => {
     expect(screen.getByText(/backend systems and data platforms/)).toBeInTheDocument();
   });
 
+  it('shows the open-to-opportunities badge as an email link and counts clicks', async () => {
+    render(<Header active="about" />);
+    const badge = screen.getByRole('link', { name: 'Open to new opportunities' });
+    expect(badge.getAttribute('href')).toMatch(/^mailto:ankurgokhale05@gmail\.com\?subject=/);
+    badge.addEventListener('click', (e) => e.preventDefault());
+    await userEvent.click(badge);
+    expect(track).toHaveBeenCalledWith('click-open-to-work', 'Clicked open to opportunities');
+  });
+
+  it('labels links with the same words they show on screen', () => {
+    render(<Header active="about" />);
+    expect(screen.getByRole('link', { name: 'Email' })).toHaveAttribute('href', 'mailto:ankurgokhale05@gmail.com');
+    expect(screen.getByRole('link', { name: 'GitHub (opens in a new tab)' })).toBeInTheDocument();
+  });
+
   it('links to every section and marks the active one', () => {
     render(<Header active="education" />);
     const nav = screen.getByRole('navigation');
     const links = within(nav).getAllByRole('link');
-    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#about', '#experience', '#education', '#publications', '#projects']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(['#about', '#experience', '#skills', '#education', '#publications', '#projects']);
     expect(within(nav).getByRole('link', { name: 'education' })).toHaveAttribute('aria-current', 'true');
     expect(within(nav).getByRole('link', { name: 'about' })).not.toHaveAttribute('aria-current');
   });

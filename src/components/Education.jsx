@@ -12,7 +12,7 @@ export default function Education() {
             <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg" />
             <header className="z-10 mb-3 flex items-center gap-3 sm:col-span-2 sm:mb-0 sm:flex-col sm:items-start">
               <Logo src={e.logo} name={e.school} />
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">{e.date}</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">{e.date}</span>
             </header>
             <div className="z-10 sm:col-span-6">
               <h3 className="font-medium leading-snug text-slate-200">
@@ -21,7 +21,7 @@ export default function Education() {
                   href={e.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  aria-label={`${e.degree}, ${e.school} (opens in a new tab)`}
+                  aria-label={`${e.degree} · ${e.school} (opens in a new tab)`}
                 >
                   <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block" />
                   <span>
@@ -32,7 +32,7 @@ export default function Education() {
                   </span>
                 </a>
               </h3>
-              <div className="text-sm text-slate-500">{e.location}</div>
+              <div className="text-sm text-slate-400">{e.location}</div>
               {e.details.length > 0 && <p className="mt-2 text-sm leading-normal">{e.details.join(' · ')}</p>}
               {e.coursework.length > 0 && <TechList items={e.coursework} label="Relevant coursework" />}
             </div>

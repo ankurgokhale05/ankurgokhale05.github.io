@@ -5,6 +5,7 @@ import Section from './components/Section';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Education from './components/Education';
+import Skills from './components/Skills';
 import Publications from './components/Publications';
 import ResumeViewer from './components/ResumeViewer';
 import { track } from './analytics';
@@ -33,14 +34,22 @@ function useActiveSection(ids) {
       if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) current = ids[ids.length - 1];
       setActive(current);
     };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    let frame = 0;
+    const onScrollFrame = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(onScroll);
+    };
+    onScrollFrame();
+    window.addEventListener('scroll', onScrollFrame, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScrollFrame);
+    };
   }, [ids]);
   return active;
 }
 
-const SECTION_IDS = ['about', 'experience', 'education', 'publications', 'projects'];
+const SECTION_IDS = ['about', 'experience', 'skills', 'education', 'publications', 'projects'];
 
 // Adds .is-visible to each [data-reveal] element the first time it scrolls into view.
 function useReveal() {
@@ -127,6 +136,9 @@ export default function App() {
             <Section id="experience" label="Work experience">
               <Experience onOpenResume={resumeSrc ? openResume : null} />
             </Section>
+            <Section id="skills" label="Skills">
+              <Skills />
+            </Section>
             <Section id="education" label="Education">
               <Education />
             </Section>
@@ -136,11 +148,12 @@ export default function App() {
             <Section id="projects" label="Selected projects">
               <Projects />
             </Section>
-            <footer id="contact" className="max-w-md scroll-mt-24 pb-16 text-sm text-slate-500 sm:pb-0">
+            <footer id="contact" className="max-w-md scroll-mt-24 pb-16 text-sm text-slate-400 sm:pb-0">
               <p>
+                {profile.openTo && <>I&apos;m open to new opportunities. </>}
                 Want to get in touch? Email me at{' '}
                 <a
-                  className="font-medium text-slate-400 hover:text-teal-300 focus-visible:text-teal-300"
+                  className="font-medium text-slate-300 hover:text-teal-300 focus-visible:text-teal-300"
                   href={`mailto:${profile.email}`}
                   onClick={() => track('click-email-footer', 'Clicked email (footer)')}
                 >

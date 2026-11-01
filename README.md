@@ -63,14 +63,16 @@ Generated folders, which are ignored by git and safe to delete: `node_modules/` 
 
 | File | What it shows |
 | --- | --- |
-| `Header.jsx` | Left column: name, title, tagline, section nav, Résumé button, social icons |
+| `Header.jsx` | Left column: name, title, tagline, open-to-opportunities badge, section nav, Résumé button, social icons |
 | `Section.jsx` | Wrapper for each section; adds the sticky section title on phones |
 | `Experience.jsx` | Job cards. Also exports `Logo`, used by Education too |
+| `Skills.jsx` | Skill groups (Languages, Data & Cloud, …) as tags |
 | `Education.jsx` | School cards with GPA and coursework |
+| `Publications.jsx` | Papers, with a link out or a "View slides" button |
 | `Projects.jsx` | Project cards with thumbnails |
 | `TechList.jsx` | The teal skill tags |
 | `Icons.jsx` | SVG icons (GitHub, LinkedIn, email, arrows) |
-| `ResumeViewer.jsx` | Full-screen, read-only résumé viewer. Uses PDF.js to draw each page as an image, so the text can't be selected or edited |
+| `ResumeViewer.jsx` | Full-screen, read-only viewer for the résumé and slides. Uses PDF.js to draw each page as an image (so text can't be selected or edited), fits the page to the screen, and offers Zoom in on desktop |
 
 ### `public/` — static files
 
@@ -81,6 +83,8 @@ Everything here is copied unchanged into the built site, at the same path.
 | `logos/` | Company and school logos |
 | `projects/` | Project thumbnails (WebP, about 640 px wide) |
 | `resume.pdf` | The résumé shown in the viewer |
+| `papers/` | Slides for publications (VGPP deck, with the team and mentor slides removed) |
+| `robots.txt`, `sitemap.xml` | Tell search engines the site can be indexed |
 | `og-image.png` | 1200×630 preview card shown when the link is shared |
 | `favicon.svg`, `apple-touch-icon.png` | Browser-tab and iPhone home-screen icons |
 | `404.html` | "Page not found" page; sends visitors home after 4 seconds |
@@ -100,11 +104,13 @@ Almost everything on the page comes from [`src/data.js`](src/data.js):
 
 | What | Where in `data.js` |
 | --- | --- |
-| Name, title, tagline, email, résumé file | `profile` |
+| Name, title, tagline, email, résumé file, open-to-opportunities text | `profile` (set `openTo: ''` to hide the badge and footer line) |
 | Social icons | `socials` |
 | About paragraphs | `about` (only `<b>` tags are allowed, for highlights) |
 | Jobs, newest first | `experience`: `date`, `title`, `company`, `location`, `url`, `logo`, `bullets`, `tech` |
+| Skills | `skills`: `group`, `items` |
 | Schools | `education`: `date`, `school`, `degree`, `location`, `url`, `logo`, `details`, `coursework` |
+| Papers | `publications`: `date`, `title`, `type`, `venue`, `authors`, `award`, `description`, `url` or `slides`, `tech` |
 | Projects | `projects`: `title`, `description`, `image`, `url`, `tech` |
 
 Images and files:
@@ -152,7 +158,9 @@ npx playwright test --headed               # watch the browser while it runs
 | `analytics.test.js` | Events reach GoatCounter, and nothing breaks if it's blocked |
 | `components/Header.test.jsx` | Nav links, active-section highlight, Résumé buttons, social links and click tracking |
 | `components/Experience.test.jsx` | Every job, bullet, date, and logo; initials when a logo is missing |
+| `components/Skills.test.jsx` | Every skill group and its skills |
 | `components/Education.test.jsx` | Degrees, GPA, coursework, school logos |
+| `components/Publications.test.jsx` | Papers, authors, ranking badge, slides button |
 | `components/ResumeViewer.test.jsx` | Draws one image per page, shows an error if the PDF is missing, closes with Esc / ✕ / outside click, locks page scrolling |
 | `App.test.jsx` | Section order, `/#resume` and `/#section` links, cards visible without animation support, hidden skip link |
 
@@ -214,5 +222,7 @@ Besides page views, the site records these events:
 | `resume-open` | The résumé viewer opens, including from `/#resume` |
 | `click-github`, `click-linkedin`, `click-mail` | A social icon is clicked |
 | `click-email-footer` | The email link in the footer is clicked |
+| `click-open-to-work` | The "Open to new opportunities" badge is clicked |
+| `slides-open` | A publication's slides are opened |
 
 Visits from `localhost` aren't counted.
