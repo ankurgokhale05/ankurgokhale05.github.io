@@ -5,3 +5,5 @@ Screenshot*.png
 *.pdf
 *.docx
 !public/resume.pdf
+test-results
+playwright-report
