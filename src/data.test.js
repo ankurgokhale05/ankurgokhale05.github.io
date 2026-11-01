@@ -113,6 +113,10 @@ describe('publications', () => {
     }
   });
 
+  it('gives every paper a short description', () => {
+    for (const p of publications) expect(p.description.length).toBeGreaterThan(40);
+  });
+
   it('credits Ankur as an author of the Saviour paper', () => {
     expect(publications.find((p) => p.title.startsWith('Saviour')).authors).toContain('A. Gokhale');
   });
