@@ -1,0 +1,39 @@
+name: Quarterly content reminder
+
+# Opens an issue every three months as a nudge to keep the site's content current.
+on:
+  schedule:
+    - cron: '0 15 1 1,4,7,10 *' # Jan 1, Apr 1, Jul 1, Oct 1 at 15:00 UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open a reminder issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh label create content-refresh --color 0e8a16 --description "Quarterly reminder to update the site" 2>/dev/null || true
+          if [ -n "$(gh issue list --label content-refresh --state open --json number --jq '.[0].number')" ]; then
+            echo "A reminder is already open; not opening another."
+            exit 0
+          fi
+          quarter="Q$(( ($(date +%-m) - 1) / 3 + 1 )) $(date +%Y)"
+          cat > body.md <<'BODY'
+          Time for a quick refresh of the portfolio. Everything below lives in `src/data.js` unless noted. About 15 minutes.
+
+          - [ ] **CVS Health bullets:** anything shipped this quarter? Add or update a bullet, with numbers if you have them (features, DAGs, data volume, latency).
+          - [ ] **Skills:** add any new language, framework, or tool you used (`skills`).
+          - [ ] **Projects / publications:** anything new worth showing?
+          - [ ] **Résumé:** if you updated it, replace `public/resume.pdf` (same name).
+          - [ ] **Open to opportunities:** still accurate? Set `profile.openTo` to `''` to hide it.
+          - [ ] **Visitor stats:** glance at https://ankurgokhale05.goatcounter.com for what people click.
+
+          When done: run `npm run test:all`, open a pull request, merge when the checks are green, and close this issue.
+          BODY
+          gh issue create --title "Quarterly portfolio refresh ($quarter)" --label content-refresh --body-file body.md

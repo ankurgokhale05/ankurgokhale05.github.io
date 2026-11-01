@@ -22,6 +22,7 @@ npm run dev       # dev server with live reload at http://localhost:5173
 | `npm run test:watch` | Re-run unit tests on every file save |
 | `npm run test:e2e` | Run end-to-end tests in a real browser |
 | `npm run test:all` | Run unit tests, then end-to-end tests |
+| `npm run check-links` | Check that the live site and every outside link still load |
 
 ## Folders and files
 
@@ -39,7 +40,9 @@ npm run dev       # dev server with live reload at http://localhost:5173
 │   └── **/*.test.js[x]   Unit tests, next to the file they test
 ├── public/               Files served as-is
 ├── e2e/                  End-to-end browser tests
-├── .github/workflows/    The GitHub Actions pipeline
+├── scripts/              Link checker used by the monthly workflow
+├── .github/workflows/    Test-and-deploy, monthly link check, quarterly reminder
+├── .github/dependabot.yml  Automatic dependency-update pull requests
 ├── vite.config.js        Build and unit-test settings
 ├── playwright.config.js  End-to-end test settings
 └── package.json          Dependencies and the npm commands above
@@ -94,9 +97,16 @@ Everything here is copied unchanged into the built site, at the same path.
 
 `site.spec.js` holds the end-to-end tests. See [Tests](#tests).
 
-### `.github/workflows/` — automation
+### `.github/` — automation
 
-`deploy.yml` runs the tests on every pull request, and on `master` it also builds and publishes the site. See [Deployment](#deployment).
+| File | What it does | When |
+| --- | --- | --- |
+| `workflows/deploy.yml` | Runs the tests; on `master`, also builds and publishes the site. See [Deployment](#deployment). | Every pull request and push to `master` |
+| `workflows/link-check.yml` | Runs `scripts/check-links.mjs` against the live site. If anything is broken, opens (or comments on) an issue labeled `broken-links`. | 1st of each month |
+| `workflows/quarterly-reminder.yml` | Opens an issue labeled `content-refresh` with a checklist for updating the content. | Jan 1, Apr 1, Jul 1, Oct 1 |
+| `dependabot.yml` | Opens pull requests when npm packages or GitHub Actions have updates. Minor and patch updates are grouped into one PR. | Weekly (npm), monthly (Actions) |
+
+All three scheduled jobs can also be run by hand: **Actions → (workflow) → Run workflow**.
 
 ## Editing content
 
@@ -210,6 +220,25 @@ Revert the bad commit on `master` (`git revert <commit>`, or the **Revert** butt
 ### One-time setup
 
 In the repository's **Settings → Pages**, **Source** must be **GitHub Actions**. This is already set.
+
+## Keeping it up to date
+
+### Dependency updates
+
+Dependabot opens pull requests on its own. For each one:
+
+1. Wait for the green check (the full test suite runs on it).
+2. Merge it. The site redeploys automatically.
+
+If a check fails, the update broke something; leave it open and look at the failed run, or close it to skip that version.
+
+### Broken links
+
+The monthly link check opens a `broken-links` issue listing what failed and where to fix it (usually `src/data.js`). Sites that refuse automated checks (SSRN, sometimes LinkedIn or Cisco) are listed separately as "blocked", not broken; open those in a browser to confirm. To run the check any time: `npm run check-links`.
+
+### Content
+
+Every quarter a `content-refresh` issue arrives with a checklist: new CVS work (with numbers), new skills, projects or papers, the résumé PDF, and whether "open to opportunities" is still accurate. Make the changes in `src/data.js`, run `npm run test:all`, open a pull request, and close the issue.
 
 ## Analytics
 

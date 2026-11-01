@@ -39,7 +39,7 @@ describe('ResumeViewer', () => {
     await waitFor(() => expect(screen.getAllByRole('img', { name: /Résumé page/ })).toHaveLength(2));
     expect(getDocument).toHaveBeenCalledWith('/resume.pdf');
     expect(screen.getByRole('img', { name: 'Résumé page 2 of 2' }).tagName).toBe('CANVAS');
-    expect(screen.queryByText('Loading résumé…')).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText('Loading résumé…')).not.toBeInTheDocument());
   });
 
   it('starts fitted to the screen and toggles zoom from the button or by tapping the page', async () => {
@@ -53,9 +53,14 @@ describe('ResumeViewer', () => {
     await userEvent.click(zoom);
     expect(await screen.findByRole('button', { name: 'Fit to screen' })).toHaveAttribute('aria-pressed', 'true');
 
-    await userEvent.click(await screen.findByRole('img', { name: 'Résumé page 1 of 1' }));
+    // Wait for the zoomed-in page to replace the original before tapping it.
+    const zoomedPage = await waitFor(() => {
+      const el = screen.getByRole('img', { name: 'Résumé page 1 of 1' });
+      expect(el).not.toBe(page);
+      return el;
+    });
+    await userEvent.click(zoomedPage);
     expect(await screen.findByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
-    expect(page).toBeTruthy();
     expect(onClose).not.toHaveBeenCalled();
   });
 
