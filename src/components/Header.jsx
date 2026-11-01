@@ -1,5 +1,6 @@
 import { profile, socials } from '../data';
 import { icons } from './Icons';
+import { track } from '../analytics';
 
 const sections = ['about', 'experience', 'education', 'projects'];
 
@@ -70,6 +71,7 @@ export default function Header({ active, onOpenResume }) {
               rel="noreferrer noopener"
               aria-label={`${s.name} (opens in a new tab)`}
               title={s.name}
+              onClick={() => track(`click-${s.icon}`, `Clicked ${s.name}`)}
             >
               <span className="sr-only">{s.name}</span>
               {icons[s.icon]('h-6 w-6')}

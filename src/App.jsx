@@ -6,6 +6,7 @@ import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Education from './components/Education';
 import ResumeViewer from './components/ResumeViewer';
+import { track } from './analytics';
 
 function useSpotlight() {
   const [pos, setPos] = useState(null);
@@ -40,12 +41,44 @@ function useActiveSection(ids) {
 
 const SECTION_IDS = ['about', 'experience', 'education', 'projects'];
 
+// Adds .is-visible to each [data-reveal] element the first time it scrolls into view.
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible');
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: '0px 0px -40px 0px', threshold: 0.1 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 export default function App() {
   const pos = useSpotlight();
   const active = useActiveSection(SECTION_IDS);
+  useReveal();
   // Visiting /#resume opens the résumé directly, so the link can be shared.
   const [resumeOpen, setResumeOpen] = useState(() => window.location.hash === '#resume');
   const openResume = useCallback(() => setResumeOpen(true), []);
+  useEffect(() => {
+    if (!resumeOpen) return;
+    // The counter script loads asynchronously; retry briefly if a /#resume visit opens before it's ready.
+    if (window.goatcounter?.count) return track('resume-open', 'Résumé opened');
+    const t = setTimeout(() => track('resume-open', 'Résumé opened'), 2000);
+    return () => clearTimeout(t);
+  }, [resumeOpen]);
   const closeResume = useCallback(() => {
     setResumeOpen(false);
     if (window.location.hash === '#resume') history.replaceState(null, '', window.location.pathname);
@@ -59,16 +92,17 @@ export default function App() {
 
   return (
     <div className="group/spotlight relative">
+      <div className="ambient-glow" aria-hidden="true" />
       {pos && (
         <div
           className="pointer-events-none fixed inset-0 z-30 hidden transition duration-300 lg:block"
           style={{ background: `radial-gradient(600px at ${pos.x}px ${pos.y}px, rgba(29, 78, 216, 0.15), transparent 80%)` }}
         />
       )}
-      <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-20 lg:px-24 lg:py-0">
+      <div className="relative mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-20 lg:px-24 lg:py-0">
         <a
           href="#content"
-          className="absolute top-0 left-0 block -translate-x-full rounded bg-gradient-to-br from-teal-400 via-blue-500 to-purple-600 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white focus-visible:translate-x-0"
+          className="sr-only rounded bg-gradient-to-br from-teal-400 via-blue-500 to-purple-600 px-4 py-3 text-sm font-bold uppercase tracking-widest text-white focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3"
         >
           Skip to Content
         </a>
@@ -78,7 +112,7 @@ export default function App() {
             <Section id="about" label="About me">
               <div className="space-y-4">
                 {about.map((p, i) => (
-                  <p key={i} className="[&_b]:font-medium [&_b]:text-slate-200" dangerouslySetInnerHTML={{ __html: p }} />
+                  <p key={i} data-reveal className="[&_b]:font-medium [&_b]:text-slate-200" dangerouslySetInnerHTML={{ __html: p }} />
                 ))}
               </div>
             </Section>
@@ -94,7 +128,11 @@ export default function App() {
             <footer className="max-w-md pb-16 text-sm text-slate-500 sm:pb-0">
               <p>
                 Want to get in touch? Email me at{' '}
-                <a className="font-medium text-slate-400 hover:text-teal-300 focus-visible:text-teal-300" href={`mailto:${profile.email}`}>
+                <a
+                  className="font-medium text-slate-400 hover:text-teal-300 focus-visible:text-teal-300"
+                  href={`mailto:${profile.email}`}
+                  onClick={() => track('click-email-footer', 'Clicked email (footer)')}
+                >
                   {profile.email}
                 </a>
                 .
